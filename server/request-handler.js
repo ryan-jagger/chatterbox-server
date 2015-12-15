@@ -45,8 +45,11 @@ var requestHandler = function(request, response) {
 
 
 
+// if request.url.search('/classes' === 0)
+// "/messages/classes"
+// '/classes/asdfasdf/aljsdfaljdflajksdflkasdf
 
-  if(request.url === "/classes/messages") {
+  if(request.url.search('/classes/') === 0) {
 
     if(request.method === 'POST') {
       statusCode = 201;
