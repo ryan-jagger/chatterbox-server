@@ -1,3 +1,11 @@
+var testmessage = {username: 'shawndrost', text: 'adsf1234', roomname: '4chan'};
+
+
+var obj = {
+  results: [],
+}
+
+
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -29,21 +37,63 @@ var requestHandler = function(request, response) {
   // console.logs in your code.
   console.log("Serving request type " + request.method + " for url " + request.url);
 
+  //request.method === "GET", request.url === "/classes/messages"
   // The outgoing status.
-  var statusCode = 200;
+  var statusCode;
+  var headers = defaultCorsHeaders;
+  headers['Content-Type'] = "application/json";
+
+
+
+
+  if(request.url === "/classes/messages") {
+
+    if(request.method === 'POST') {
+      statusCode = 201;
+      //parse through data coming in
+      //push it to storage / results
+      var str = "";
+      request.on('data', function(chunk){
+        //console.log(chunk);
+        str += chunk;
+      });
+      request.on('end', function(){
+        obj.results.push(JSON.parse(str));
+        response.writeHead(statusCode, headers);
+        response.end(JSON.stringify( obj ));
+      });
+
+    } else if (request.method === 'GET' || "OPTIONS"){
+      statusCode = 200;
+      response.writeHead(statusCode, headers);
+      response.end(JSON.stringify(obj));
+
+    } else {
+      statusCode = 404;
+    }
+  } else {
+    statusCode = 404;
+    response.writeHead(statusCode, headers);
+    response.end();
+  }
+
+
+  //handler will get a request that contains an object with data
+  //take that data and put it in our storage array --- do some magic to grab the data
+  //
 
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
+
 
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "text/plain";
+
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
+
 
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
@@ -52,7 +102,14 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
+
+  //{results: [{roomname: 'blah', text:'hi'}]
+
+  //}
+
+
+
+
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
