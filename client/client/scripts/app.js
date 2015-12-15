@@ -1,7 +1,8 @@
 var app = {
   // variables and defaults
   testmessage: {username: 'shawndrost', text: 'adsf1234', roomname: '4chan'},
-  server: 'https://api.parse.com/1/classes/chatterbox',
+  //server: 'https://api.parse.com/1/classes/chatterbox',
+  server:  "http://127.0.0.1:3000/classes/messages",
   username: 'anonymous',
   roomname: 'lobby',
   friends: {},
@@ -57,7 +58,7 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'GET',
-      data: 'order=-createdAt',
+      // data: 'order=-createdAt',
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: ', data);
