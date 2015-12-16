@@ -9,10 +9,21 @@ var defaultCorsHeaders = {
 
 /* Import node's http module: */
 var http = require("http");
+var fs = require("fs");
 var express = require("express");
 var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.json());
+
+
+
+fs.readFile('../package.json', "utf-8", function (err, data) {
+  if (err) throw err;
+  console.log(JSON.parse(data));
+  console.log(typeof JSON.parse(data));
+});
+
+
 
 app.options('*', function(req, res){
   res.set(defaultCorsHeaders);
